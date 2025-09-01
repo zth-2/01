@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉❤️ 教师节限定卡池 · 抽卡模拟 ❤️🎉</title>
+    <style>
+      :root {
+        --bg: radial-gradient(60% 50% at 10% 0%, #ffd1dc 0%, transparent 45%),
+          radial-gradient(50% 50% at 90% 0%, #b5eaea 0%, transparent 50%),
+          linear-gradient(180deg, #f9f7f7 0%, #e3f6f5 100%);
+        --glass: rgba(255, 255, 255, 0.5);
+        --border: rgba(150, 150, 150, 0.3);
+        --primary: #ffbd87;
+        --accent: #a3d8f4;
+        --good: #7dcfb6;
+        --bad: #ff9a8b;
+        --text: #5a6270;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: ui-rounded, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+          "Helvetica Neue", Arial, "Noto Color Emoji", sans-serif;
+        background: var(--bg);
+        overflow-x: hidden;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px;
+        padding-bottom: 120px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #ffd1dc, #ff9a8b 60%, #ffbd87);
+        position: relative;
+        box-shadow: 0 10px 30px rgba(255, 180, 180, 0.35);
+      }
+      .logo:before {
+        content: "❤";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 28px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 3vw, 28px);
+      }
+      .badge {
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        font-size: 13px;
+      }
+
+      .panel {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 0.4)
+        );
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: 0 15px 60px rgba(0, 0, 0, 0.1);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+      }
+      @media (max-width: 940px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        border: none;
+        padding: 12px 16px;
+        border-radius: 14px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        background: linear-gradient(90deg, #ff9a8b, #ffbd87);
+        box-shadow: 0 8px 24px rgba(255, 157, 139, 0.35);
+        transition: 0.25s transform, 0.25s filter, 0.25s box-shadow;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        filter: saturate(1.06);
+        box-shadow: 0 10px 36px rgba(255, 157, 139, 0.45);
+      }
+      .btn.secondary {
+        background: linear-gradient(90deg, #a3d8f4, #b5eaea);
+        box-shadow: 0 8px 24px rgba(163, 216, 244, 0.35);
+      }
+      .btn.ghost {
+        background: var(--glass);
+        color: var(--text);
+        border: 1px dashed var(--border);
+        box-shadow: none;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .rollzone {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 14px;
+        overflow: auto;
+        scrollbar-gutter: stable;
+        height: 630px;
+      }
+      .card {
+        position: relative;
+        height: 100px;
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.6);
+        display: grid;
+        place-items: center;
+        padding: 10px;
+      }
+      .card.big {
+        grid-column: 1/-1;
+        height: 180px;
+      }
+      .tag {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--border);
+      }
+      .card.r {
+        background: linear-gradient(
+          135deg,
+          rgba(197, 232, 222, 0.55),
+          rgba(186, 220, 255, 0.55)
+        );
+        border-color: rgba(160, 200, 255, 0.85);
+      }
+      .card.sr {
+        background: linear-gradient(
+          135deg,
+          rgba(186, 220, 255, 0.6),
+          rgba(147, 197, 253, 0.6)
+        );
+        border: 2px solid rgba(90, 170, 255, 0.85);
+        animation: shine 2.4s linear infinite;
+      }
+      .card.ssr {
+        background: radial-gradient(
+            180px 80px at 80% -10%,
+            rgba(255, 255, 255, 0.7),
+            transparent 60%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(255, 189, 135, 0.5),
+            rgba(163, 216, 244, 0.5)
+          );
+        animation: shine 2.4s linear infinite;
+        border-color: rgba(255, 189, 135, 0.8);
+      }
+      .card.ur {
+        background: radial-gradient(
+            220px 100px at 80% -10%,
+            rgba(255, 255, 255, 0.9),
+            transparent 60%
+          ),
+          radial-gradient(
+            160px 80px at 20% 110%,
+            rgba(255, 255, 255, 0.45),
+            transparent 65%
+          ),
+          conic-gradient(
+            from 210deg at 50% 50%,
+            rgba(255, 196, 140, 0.65),
+            rgba(210, 160, 255, 0.7),
+            rgba(170, 200, 255, 0.65),
+            rgba(255, 196, 140, 0.65)
+          );
+        border: 2px solid rgba(210, 160, 255, 1);
+        box-shadow: 0 0 20px rgba(210, 160, 255, 0.6),
+          0 0 46px rgba(255, 160, 200, 0.5),
+          0 12px 55px rgba(170, 200, 255, 0.55);
+        animation: shine 2.4s linear infinite, glow 3.6s ease-in-out infinite;
+      }
+      @keyframes shine {
+        0% {
+          filter: brightness(1);
+        }
+        50% {
+          filter: brightness(1.18);
+        }
+        100% {
+          filter: brightness(1);
+        }
+      }
+      @keyframes glow {
+        0% {
+          box-shadow: 0 0 16px rgba(255, 196, 140, 0.55),
+            0 0 40px rgba(255, 160, 200, 0.45),
+            0 10px 50px rgba(170, 200, 255, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 32px rgba(255, 196, 140, 0.85),
+            0 0 70px rgba(255, 160, 200, 0.65),
+            0 14px 70px rgba(170, 200, 255, 0.55);
+        }
+        100% {
+          box-shadow: 0 0 16px rgba(255, 196, 140, 0.55),
+            0 0 40px rgba(255, 160, 200, 0.45),
+            0 10px 50px rgba(170, 200, 255, 0.4);
+        }
+      }
+      .resultText {
+        text-align: center;
+        line-height: 1.35;
+        font-size: clamp(14px, 2.4vw, 18px);
+      }
+      .muted {
+        color: #5a6270aa;
+        font-size: 12px;
+      }
+
+      .flex {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .history {
+        min-height: 260px;
+        max-height: 380px;
+        overflow: auto;
+        padding-right: 6px;
+      }
+      .historyItem {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 6px;
+        border-bottom: 1px dashed var(--border);
+      }
+      .pill {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .prob-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-top: 8px;
+      }
+      .prob-table th,
+      .prob-table td {
+        padding: 6px 8px;
+        border-bottom: 1px dashed var(--border);
+      }
+      .prob-table th {
+        text-align: left;
+        color: var(--text);
+        font-weight: 700;
+      }
+      .prob-table .p {
+        text-align: right;
+        color: #ff9a8b;
+      }
+
+      .chartWrap {
+        height: 220px;
+      }
+      canvas#chart {
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 14px;
+        border: 1px solid var(--border);
+      }
+
+      .notice {
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      /* Barrage / 弹幕 */
+      .barrage {
+        position: fixed;
+        inset: 0 0 auto 0;
+        pointer-events: none;
+        z-index: 50;
+        overflow: hidden;
+      }
+      .bullet {
+        position: fixed;
+        white-space: nowrap;
+        left: 100%;
+        top: 0;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--border);
+        font-size: 13px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        animation: fly linear forwards;
+      }
+      @keyframes fly {
+        to {
+          transform: translateX(calc(-100vw - 120%));
+        }
+      }
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        display: none;
+        place-items: center;
+        z-index: 60;
+      }
+      .modal .inner {
+        width: min(720px, 92vw);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 0.4)
+        );
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      /* Confetti */
+      .confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 70;
+      }
+      .confetti span {
+        position: absolute;
+        width: 8px;
+        height: 14px;
+        background: linear-gradient(180deg, #fff, #ffbd87);
+        transform: rotate(0deg);
+        opacity: 0.9;
+        border-radius: 2px;
+      }
+
+      /* Footer */
+      footer {
+        position: fixed;
+        inset: auto 0 0 0;
+        padding: 8px 16px;
+        display: flex;
+        justify-content: center;
+      }
+      .footer {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        backdrop-filter: blur(8px);
+      }
+
+      /* Scrollbar niceness */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #b5eaea, #a3d8f4);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .announcement {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .announcement.show {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .announcement .inner {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px;
+        padding: 24px 32px;
+        max-width: 480px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        animation: pop 0.3s ease-out;
+      }
+
+      .announcement h2 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 22px;
+        color: #ff9a8b;
+      }
+
+      .announcement p {
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #5a6270;
+      }
+
+      .announcement .btn {
+        background: linear-gradient(90deg, #ff9a8b, #ffbd87);
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+</head>
+<body>
+  <div class="barrage" id="barrage"></div> 
+  <div class="confetti" id="confetti"></div> 
+  <div class="wrap">
+      <header>
+      <div class="title">
+          <div class="logo"></div>
+          <div>
+            <h1>🎉❤️ 教师节限定卡池 · 抽卡模拟 ❤️🎉</h1>
+            <div class="muted" style="margin-top: 4px">
+              制作者：灏瀚无边 &nbsp; | &nbsp; 祝所有老师教师节快乐！
+          </div>
+        </div>
+      </div>
+        <span class="badge">抽取日期：2025-09-10 之前</span>
+      </header>
+
+      <div class="grid" style="margin-top: 16px">
+        <section class="panel">
+          <div class="between">
+            <div class="flex">
+              <button class="btn" id="roll1">单抽</button>
+              <button class="btn secondary" id="roll10">十连</button>
+              <button class="btn ghost" id="clear">清空记录</button>
+            </div>
+            <div class="pill" id="status">就绪 ✅</div>
+          </div>
+
+          <div class="rollzone" id="rollzone"></div>
+        </section>
+
+        <aside class="panel">
+          <div class="between" style="margin-bottom: 8px">
+            <strong>出货统计</strong>
+            <span class="muted" id="total">0 抽</span>
+          </div>
+          <div class="chartWrap">
+            <canvas id="chart" width="647" height="330"></canvas>
+          </div>
+
+          <div class="between" style="margin-top: 16px">
+            <strong>历史记录</strong>
+            <button class="btn ghost" id="export">导出</button>
+          </div>
+          <div class="history" id="history"></div>
+        </aside>
+      </div>
+
+      <section class="panel" style="margin-top: 16px">
+        <details open="">
+          <summary style="cursor: pointer">
+            <strong>概率公示</strong>
+            <span class="muted">* Tip：SSR 超低概率，非酋请量力而抽。</span>
+          </summary>
+          <table class="prob-table" id="probTable">
+            <thead>
+              <tr>
+                <th>结果</th>
+                <th class="p">概率</th>
+              </tr>
+            </thead>
+            <tbody><tr><td>滚你妈的 <span class="pill" style="margin-left:6px">R</span></td><td class="p">10%</td></tr><tr><td>去你妈的 <span class="pill" style="margin-left:6px">R</span></td><td class="p">10%</td></tr><tr><td>你也配？ <span class="pill" style="margin-left:6px">R</span></td><td class="p">10%</td></tr><tr><td>傻逼二次元 <span class="pill" style="margin-left:6px">R</span></td><td class="p">10%</td></tr><tr><td>癔症又犯了？ <span class="pill" style="margin-left:6px">R</span></td><td class="p">10%</td></tr><tr><td>死男同真恶心 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>现在是幻想时刻 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>柚子厨滚出去 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>这是最后通牒 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>以后不要再和我扯上关系 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>被拉黑+屏蔽 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>小男娘 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">5%</td></tr><tr><td>发来一张可爱图片 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">2.5%</td></tr><tr><td>收到一条信息 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">2.5%</td></tr><tr><td>下次再说吧 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">2.5%</td></tr><tr><td>你是个好人 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">2.5%</td></tr><tr><td>我一直把你当好朋友 <span class="pill" style="margin-left:6px">SR</span></td><td class="p">2.5%</td></tr><tr><td>滚出去 <span class="pill" style="margin-left:6px">R</span></td><td class="p">2.489%</td></tr><tr><td>好呀宝宝 <span class="pill" style="margin-left:6px">SSR</span></td><td class="p">0.01%</td></tr><tr><td>????????（隐藏款） <span class="pill" style="margin-left:6px">UR</span></td><td class="p">0.001%</td></tr><tr><td><em>总计</em></td><td class="p"><em>100.00%</em></td></tr></tbody>
+          </table>
+          <div class="notice">
+            ⚠️
+            本页面仅用于娱乐，抽取结果随机，概率已在界面公开显示。你可以自定义奖池文本与概率，带来更合群的梗味体验。
+          </div>
+        </details>
+      </section>
+
+      <section class="panel" style="margin-top: 16px">
+        <details>
+          <summary style="cursor: pointer">
+            <strong>自定义配置</strong>
+            <span class="muted">（可将下方 JSON 粘贴覆盖）</span>
+          </summary>
+          <div class="muted" style="margin: 8px 0">
+            字段：<code>label</code> 文案，<code>weight</code> 概率占比（总和 =
+            100），<code>tag</code> 标签（可选：UR/SSR/SR/R），<code>type</code>
+            触发特殊效果（可选：<code>ur</code>、<code>ssr</code>、<code>image</code>、<code>quote</code>）。
+          </div>
+          <textarea id="configArea" style="
+              width: 100%;
+              height: 180px;
+              background: rgba(255, 255, 255, 0.5);
+              color: var(--text);
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 10px;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+                monospace;
+            "></textarea>
+          <div class="flex" style="margin-top: 8px">
+            <button class="btn" id="applyCfg">应用配置</button>
+            <button class="btn ghost" id="resetCfg">还原默认</button>
+          </div>
+        </details>
+      </section>
+    </div>
+    <!-- 结果放大 Modal -->
+    <div class="modal" id="modal">
+      <div class="inner">
+        <div class="between" style="margin-bottom: 8px">
+          <strong>抽取结果</strong>
+          <button class="btn ghost" id="closeModal">关闭</button>
+        </div>
+        <div class="card big" id="modalCard">
+          <span class="tag" id="modalTag"></span>
+          <div class="resultText" id="modalText"></div>
+        </div>
+      </div>
+    </div>
+    <div class="announcement" id="announcement">
+    </div><script>
+      // ====== 配置======
+      const DEFAULT_POOL = [
+        { label: "祝您年轻漂亮，有活力。", weight: 10, tag: "R" },
+        { label: "老师，您辛苦了", weight: 10, tag: "R" },
+        { label: "桃李芬芳，感恩有您", weight: 10, tag: "R" },
+        { label: "祝老师放假又早又多", weight: 10, tag: "R" },
+        { label: "三生有幸，得您伴我一程风雪，", weight: 10, tag: "R" },
+        { label: "三尺讲台存日月，一支粉笔写春秋。", weight: 5, tag: "SR" },
+        { label: "感谢您以知识为灯，照亮我们前行的路。", weight: 5, tag: "SR" },
+        { label: "师恩如酒，醇厚绵长；师恩如灯，温暖明亮。", weight: 5, tag: "SR" },
+        { label: "曾经懵懂求知路，幸得您悉心指引。", weight: 5, tag: "SR" },
+        { label: "一支粉笔，两袖清风，三尺讲台，四季耕耘。", weight: 5, tag: "SR" },
+        { label: "教师节到了，愿您笑容常伴，万事无忧！", weight: 5, tag: "SR" },
+        { label: "祝您事事顺遂，桃李满天下！", weight: 5, tag: "SR" },
+        { label: "笔尖耕耘桃李地，默水浇开智慧花。", weight: 2.5, tag: "SR"},
+        { label: "教诲如春风，师恩似海深", weight: 2.5, tag: "SR"},
+        { label: "桃李无音，明月随心。盛行千里，不忘师恩。", weight: 2.5, tag: "SR" },
+        { label: "以一灯传诸灯，终至万灯皆明。", weight: 2.5, tag: "SR" },
+        { label: "辛勤的汗水是您无私的奉献，桃李满天下是您最高的荣誉。", weight: 2.5, tag: "SR" },
+        { label: "师者若水，润物无声，桃李争妍，四海承风", weight: 2.5, tag: "SR" },
+        { label: "春蚕到死丝方尽 蜡炬成灰泪始干", weight: 0.01, tag: "SSR", type: "ssr" },
+        
+      ];
+
+      const PLACEHOLDER_SVGS = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFBD87"/><stop offset="1" stop-color="#A3D8F4"/></linearGradient></defs><rect width="100%" height="100%" fill="#F9F7F7"/><circle cx="90" cy="60" r="38" fill="url(#g)"/><rect x="120" y="40" width="50" height="40" rx="8" fill="#fff" opacity=".15"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120"><rect width="100%" height="100%" fill="#F9F7F7"/><g opacity=".9"><path d="M10 100 Q100 20 190 100" fill="none" stroke="#B5EAEA" stroke-width="6"/></g><circle cx="150" cy="38" r="12" fill="#FFBD87"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120"><rect width="100%" height="100%" fill="#F9F7F7"/><g><rect x="18" y="20" width="60" height="80" rx="10" fill="#A3D8F4" opacity=".5"/><rect x="88" y="28" width="60" height="64" rx="10" fill="#FFBD87" opacity=".6"/><rect x="158" y="36" width="24" height="48" rx="8" fill="#7DCFB6" opacity=".6"/></g></svg>',
+      ];
+
+      const colors = ["#FFBD87", "#A3D8F4", "#7DCFB6", "#B5EAEA"];
+      const bgColor = "#F9F7F7";
+
+      for (let i = 0; i < 100; i++) {
+        const shapeType = Math.floor(Math.random() * 3); // 0: circle, 1: rect, 2: ellipse
+        const shapes = [];
+
+        const shapeCount = 2 + Math.floor(Math.random() * 3); // 每个 SVG 2~4 个形状
+
+        for (let j = 0; j < shapeCount; j++) {
+          const x = 20 + Math.random() * 160;
+          const y = 20 + Math.random() * 80;
+          const w = 10 + Math.random() * 40;
+          const h = 10 + Math.random() * 40;
+          const r = 5 + Math.random() * 30;
+          const fill = colors[Math.floor(Math.random() * colors.length)];
+          const opacity = (0.5 + Math.random() * 0.4).toFixed(2);
+
+          if (shapeType === 0) {
+            shapes.push(
+              `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" opacity="${opacity}"/>`
+            );
+          } else if (shapeType === 1) {
+            shapes.push(
+              `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${
+                r / 2
+              }" fill="${fill}" opacity="${opacity}"/>`
+            );
+          } else {
+            shapes.push(
+              `<ellipse cx="${x}" cy="${y}" rx="${w / 2}" ry="${
+                h / 2
+              }" fill="${fill}" opacity="${opacity}"/>`
+            );
+          }
+        }
+
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120"><rect width="100%" height="100%" fill="${bgColor}"/><g>${shapes.join(
+          ""
+        )}</g></svg>`;
+        PLACEHOLDER_SVGS.push(svg);
+      }
+
+      const QUOTES = [
+        
+      ];
+
+      // ====== 状态与 DOM ======
+      let POOL = JSON.parse(JSON.stringify(DEFAULT_POOL));
+      const roll1Btn = document.getElementById("roll1");
+      const roll10Btn = document.getElementById("roll10");
+      const clearBtn = document.getElementById("clear");
+      const exportBtn = document.getElementById("export");
+      const statusEl = document.getElementById("status");
+      const rollzone = document.getElementById("rollzone");
+      const historyEl = document.getElementById("history");
+      const totalEl = document.getElementById("total");
+      const probTableBody = document.querySelector("#probTable tbody");
+      const configArea = document.getElementById("configArea");
+
+      const modal = document.getElementById("modal");
+      const closeModal = document.getElementById("closeModal");
+      const modalCard = document.getElementById("modalCard");
+      const modalText = document.getElementById("modalText");
+      const modalTag = document.getElementById("modalTag");
+
+      let HISTORY = []; // {ts, label, tag}
+      const COUNTS = new Map();
+
+      // 截止时间（本地时区）
+      const DEADLINE = new Date("2025-09-10T23:59:59");
+
+      function checkDeadline() {
+        const now = new Date();
+        const expired = now >= DEADLINE;
+        roll1Btn.disabled = expired;
+        roll10Btn.disabled = expired;
+        statusEl.textContent = expired ? "活动已结束 ⛔" : "就绪 ✅";
+      }
+
+      // 初始化概率表 & 配置区
+      function renderProbTable() {
+        probTableBody.innerHTML = "";
+        let sum = 0;
+        POOL.forEach((item) => (sum += Number(item.weight)));
+        POOL.forEach((item) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${escapeHTML(
+            item.tag === "UR" ? "????????（隐藏款）" : item.label
+          )} <span class="pill" style="margin-left:6px">${
+            item.tag || "R"
+          }</span></td><td class="p">${Number(item.weight)}%</td>`;
+          probTableBody.appendChild(tr);
+        });
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td><em>总计</em></td><td class="p"><em>${sum.toFixed(
+          2
+        )}%</em></td>`;
+        probTableBody.appendChild(tr);
+      }
+
+      function resetCounts() {
+        COUNTS.clear();
+        POOL.forEach((i) => COUNTS.set(i.label, 0));
+      }
+
+      function updateStats() {
+        totalEl.textContent = `${HISTORY.length} 抽`;
+        drawChart();
+      }
+
+      // 加权随机
+      function weightedPick() {
+        const r = Math.random() * 100; // 0 ~ 100
+        let acc = 0;
+        for (const item of POOL) {
+          acc += Number(item.weight);
+          if (r <= acc) return item;
+        }
+        return POOL[POOL.length - 1];
+      }
+
+      // 渲染单张卡片
+      function renderCard(result) {
+        const card = document.createElement("div");
+        card.className = "card " + result.tag.toLowerCase();
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = result.tag || "R";
+        const text = document.createElement("div");
+        text.className = "resultText";
+
+        // 特殊类型展示
+        if (result.type === "image") {
+          const img = document.createElement("img");
+          img.alt = result.label;
+          img.style.maxWidth = "100%";
+          img.style.maxHeight = "100%";
+          img.style.borderRadius = "10px";
+          img.src =
+            "data:image/svg+xml;charset=utf-8," +
+            encodeURIComponent(
+              PLACEHOLDER_SVGS[
+                Math.floor(Math.random() * PLACEHOLDER_SVGS.length)
+              ]
+            );
+          text.appendChild(img);
+          const small = document.createElement("div");
+          small.textContent = result.label;
+          small.className = "muted";
+          small.style.marginTop = "6px";
+          text.appendChild(small);
+        } else if (result.type === "quote") {
+          result.quote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+          text.innerHTML = `<div style="font-size:18px; opacity:.95">“${escapeHTML(
+            result.quote
+          )}”</div><div class="muted" style="margin-top:6px">${escapeHTML(
+            result.label
+          )}</div>`;
+        } else {
+          text.textContent = result.label;
+        }
+
+        card.appendChild(tag);
+        card.appendChild(text);
+
+        // 点击放大
+        card.addEventListener("click", () => openModalFor(result));
+        return card;
+      }
+
+      function openModalFor(result) {
+        modal.style.display = "grid";
+        modalCard.className = "card big" + (result.tag === "SSR" ? " ssr" : "");
+        modalText.innerHTML = "";
+        modalTag.textContent = result.tag || "R";
+        if (result.type === "image") {
+          const img = document.createElement("img");
+          img.alt = result.label;
+          img.style.maxWidth = "100%";
+          img.style.maxHeight = "100%";
+          img.style.borderRadius = "10px";
+          img.src =
+            "data:image/svg+xml;charset=utf-8," +
+            encodeURIComponent(
+              PLACEHOLDER_SVGS[
+                Math.floor(Math.random() * PLACEHOLDER_SVGS.length)
+              ]
+            );
+          modalText.appendChild(img);
+          const small = document.createElement("div");
+          small.textContent = result.label;
+          small.className = "muted";
+          small.style.marginTop = "6px";
+          modalText.appendChild(small);
+        } else if (result.type === "quote") {
+          modalText.innerHTML = `<div style="font-size:22px; opacity:.95">“${escapeHTML(
+            result.quote
+          )}”</div><div class="muted" style="margin-top:6px">${escapeHTML(
+            result.label
+          )}</div>`;
+        } else {
+          modalText.textContent = result.label;
+        }
+      }
+
+      closeModal.addEventListener(
+        "click",
+        () => (modal.style.display = "none")
+      );
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+
+      // 弹幕
+      const barrage = document.getElementById("barrage");
+      function shootBullet(text) {
+        const span = document.createElement("span");
+        span.className = "bullet";
+        span.textContent = `已抽出：${text}`;
+        const vh = Math.max(window.innerHeight * 0.8, 300);
+        span.style.top = Math.round(Math.random() * (vh - 40)) + "px";
+        const dur = 2 + Math.random() * 4; // 2~6s
+        span.style.animationDuration = dur + "s";
+        barrage.appendChild(span);
+        setTimeout(() => span.remove(), dur * 1000 + 200);
+      }
+
+      // 简易烟花彩带（SSR）
+      const confetti = document.getElementById("confetti");
+      function boomConfetti() {
+        for (let i = 0; i < 180; i++) {
+          const s = document.createElement("span");
+          s.style.left = Math.random() * 100 + "vw";
+          s.style.top = "-10px";
+          const rot = Math.random() * 360;
+          const dur = 1500 + Math.random() * 1200;
+          s.animate(
+            [
+              { transform: `translateY(0) rotate(${rot}deg)`, opacity: 1 },
+              {
+                transform: `translateY(100vh) rotate(${rot + 360}deg)`,
+                opacity: 0.8,
+              },
+            ],
+            {
+              duration: dur,
+              easing: "cubic-bezier(.12,.78,.22,1)",
+              fill: "forwards",
+            }
+          );
+          confetti.appendChild(s);
+          setTimeout(() => s.remove(), dur + 100);
+        }
+      }
+
+      function boomFirework() {
+        const count = 9;
+        for (let j = 0; j < count; j++) {
+          setTimeout(() => {
+            const x =
+              Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1;
+            const y = Math.random() * (window.innerHeight / 2) + 120;
+
+            // 火箭本体
+            const rocket = document.createElement("span");
+            rocket.style.position = "fixed";
+            rocket.style.left = x + "px";
+            rocket.style.top = window.innerHeight + "px";
+            rocket.style.width = "4px";
+            rocket.style.height = "18px";
+            rocket.style.background = "white";
+            rocket.style.borderRadius = "2px";
+            rocket.style.boxShadow = "0 0 8px white";
+            rocket.style.zIndex = 9999;
+            document.body.appendChild(rocket);
+
+            // 轨迹动画
+            const rocketAnim = rocket.animate(
+              [
+                { transform: `translateY(0)`, opacity: 1 },
+                {
+                  transform: `translateY(-${window.innerHeight - y}px)`,
+                  opacity: 1,
+                },
+              ],
+              {
+                duration: 1500,
+                easing: "cubic-bezier(.2,.8,.4,1)",
+                fill: "forwards",
+              }
+            );
+
+            // === 尾焰拖影 ===
+            const trailInterval = setInterval(() => {
+              const trail = document.createElement("span");
+              trail.style.position = "fixed";
+              trail.style.left = x + Math.random() * 6 - 3 + "px";
+              trail.style.top = rocket.getBoundingClientRect().top + "px";
+              trail.style.width = "5px";
+              trail.style.height = "5px";
+              trail.style.borderRadius = "50%";
+              trail.style.background = "orange";
+              trail.style.boxShadow = "0 0 8px orange, 0 0 15px yellow";
+              trail.style.zIndex = 9999;
+              document.body.appendChild(trail);
+
+              const dur = 500 + Math.random() * 300;
+              trail.animate(
+                [
+                  { transform: "scale(1)", opacity: 1 },
+                  { transform: "scale(0.2)", opacity: 0 },
+                ],
+                { duration: dur, easing: "ease-out", fill: "forwards" }
+              );
+              setTimeout(() => trail.remove(), dur + 50);
+            }, 50);
+
+            // 火箭到达后爆炸
+            rocketAnim.onfinish = () => {
+              clearInterval(trailInterval);
+              rocket.remove();
+
+              // === 爆炸闪光 ===
+              const flash = document.createElement("div");
+              flash.style.position = "fixed";
+              flash.style.left = x - 50 + "px";
+              flash.style.top = y - 50 + "px";
+              flash.style.width = "100px";
+              flash.style.height = "100px";
+              flash.style.borderRadius = "50%";
+              flash.style.background = "radial-gradient(white, transparent)";
+              flash.style.opacity = 0;
+              flash.style.zIndex = 9998;
+              document.body.appendChild(flash);
+
+              flash.animate(
+                [
+                  { opacity: 0, transform: "scale(0.3)" },
+                  { opacity: 1, transform: "scale(1.2)" },
+                  { opacity: 0, transform: "scale(1.5)" },
+                ],
+                { duration: 300, easing: "ease-out", fill: "forwards" }
+              );
+              setTimeout(() => flash.remove(), 400);
+
+              // 爆炸粒子
+              for (let i = 0; i < 150; i++) {
+                const p = document.createElement("span");
+                p.style.position = "fixed";
+                p.style.left = x + "px";
+                p.style.top = y + "px";
+                p.style.width = "6px";
+                p.style.height = "6px";
+                p.style.borderRadius = "50%";
+                const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                p.style.background = color;
+                p.style.boxShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
+                p.style.zIndex = 9999;
+                document.body.appendChild(p);
+
+                const angle = Math.random() * 2 * Math.PI;
+                const dist = 120 + Math.random() * 180;
+                const dx = Math.cos(angle) * dist;
+                const dy = Math.sin(angle) * dist;
+                const dur = 1800 + Math.random() * 1200;
+
+                p.animate(
+                  [
+                    { transform: "translate(0,0) scale(1)", opacity: 1 },
+                    {
+                      transform: `translate(${dx}px,${dy}px) scale(${
+                        0.3 + Math.random() * 0.5
+                      })`,
+                      opacity: 0,
+                    },
+                  ],
+                  {
+                    duration: dur,
+                    easing: "cubic-bezier(.1,.7,.2,1)",
+                    fill: "forwards",
+                  }
+                );
+
+                setTimeout(() => p.remove(), dur + 200);
+              }
+            };
+          }, j * 1000);
+        }
+      }
+
+      // 历史记录
+      function pushHistory(item) {
+        HISTORY.push({
+          ts: Date.now(),
+          label: item.label,
+          tag: item.tag || "R",
+        });
+        COUNTS.set(item.label, (COUNTS.get(item.label) || 0) + 1);
+        const h = document.createElement("div");
+        h.className = "historyItem";
+        h.innerHTML = `<span class="pill">${
+          item.tag || "R"
+        }</span><span>${escapeHTML(
+          item.label
+        )}</span><span class="muted" style="margin-left:auto">${new Date().toLocaleTimeString()}</span>`;
+        historyEl.prepend(h);
+        // 限制元素数量
+        while (historyEl.children.length > 1000) {
+          historyEl.removeChild(historyEl.lastChild);
+        }
+      }
+
+      // 绘制统计条形图
+      const chart = document.getElementById("chart");
+      const ctx = chart.getContext("2d");
+      function drawChart() {
+        const dpr = window.devicePixelRatio || 1;
+        const { width, height } = chart.getBoundingClientRect();
+        chart.width = width * dpr;
+        chart.height = height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+        const labels = POOL.map((i) => (i.tag === "SSR" ? "SSR" : ""));
+        const counts = POOL.map((i) => COUNTS.get(i.label) || 0);
+        const max = Math.max(1, ...counts);
+        const barW = Math.max(6, (width - 40) / counts.length - 6);
+        ctx.fillStyle = "rgba(255,255,255,.3)";
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = "#5A6270AA";
+        ctx.fillText("次数", 8, 14);
+        counts.forEach((v, i) => {
+          const x = 20 + i * (barW + 6);
+          const h = Math.ceil((v / max) * (height - 40));
+          ctx.fillStyle =
+            POOL[i].tag === "SR"
+              ? "#A3D8F4"
+              : POOL[i].tag === "SSR"
+              ? "#FFBD87"
+              : POOL[i].tag === "UR"
+              ? "#B19CD9"
+              : "#B5EAEA";
+          ctx.fillRect(x, height - 20 - h, barW, h);
+          // ctx.fillStyle = "#5A6270AA";
+          // ctx.fillText(v, x , height - 26 - h);
+        });
+      }
+
+      // 工具
+      function escapeHTML(s) {
+        return (s + "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[c])
+        );
+      }
+
+      // 抽卡流程
+      function doRoll(times) {
+        roll1Btn.disabled = true;
+        roll10Btn.disabled = true;
+        const zone = rollzone;
+        zone.innerHTML = "";
+        for (let i = 0; i < times; i++) {
+          // 动画延时：十连顺次翻牌
+          setTimeout(() => {
+            const item = weightedPick();
+            const card = renderCard(item);
+            zone.appendChild(card);
+            // 小翻转动画
+            card.animate(
+              [
+                { transform: "rotateY(88deg) scale(.9)", opacity: 0.2 },
+                { transform: "rotateY(0) scale(1)", opacity: 1 },
+              ],
+              { duration: 1200, easing: "cubic-bezier(.2,.9,.2,1)" }
+            );
+
+            pushHistory(item);
+            shootBullet(`${item.tag || "R"} · ${item.label}`);
+            updateStats();
+
+           
+            if (i == times - 1) {
+              roll1Btn.disabled = false;
+              roll10Btn.disabled = false;
+            }
+          }, i * 260);
+        }
+      }
+
+      // 导出
+      function exportJSON() {
+        const data = {
+          history: HISTORY,
+          counts: Object.fromEntries(COUNTS),
+          pool: POOL,
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "gacha_export.json";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // 配置应用
+      function applyConfig(json) {
+        try {
+          const arr = JSON.parse(json);
+          const sum = arr.reduce((s, i) => s + Number(i.weight || 0), 0);
+          if (Math.abs(sum - 100) > 1e-6)
+            throw new Error("概率总和需为 100，目前为 " + sum);
+          if (!arr.length) throw new Error("配置为空");
+          POOL = arr;
+          resetCounts();
+          HISTORY = [];
+          historyEl.innerHTML = "";
+          rollzone.innerHTML = "";
+          updateStats();
+          renderProbTable();
+          statusEl.textContent = "已应用新配置 ✅";
+        } catch (err) {
+          alert("配置错误：" + err.message);
+        }
+      }
+
+      // 绑定
+      roll1Btn.addEventListener("click", () => doRoll(1));
+      roll10Btn.addEventListener("click", () => doRoll(10));
+      clearBtn.addEventListener("click", () => {
+        HISTORY = [];
+        historyEl.innerHTML = "";
+        resetCounts();
+        updateStats();
+        statusEl.textContent = "已清空 🧹";
+        rollzone.innerHTML = "";
+      });
+      exportBtn.addEventListener("click", exportJSON);
+
+      document
+        .getElementById("applyCfg")
+        .addEventListener("click", () => applyConfig(configArea.value));
+      document.getElementById("resetCfg").addEventListener("click", () => {
+        configArea.value = JSON.stringify(DEFAULT_POOL, null, 2);
+        applyConfig(configArea.value);
+      });
+
+      // 首次渲染
+      // checkDeadline();
+      renderProbTable();
+      resetCounts();
+      updateStats();
+      configArea.value = JSON.stringify(DEFAULT_POOL, null, 2);
+
+      const announcement = document.getElementById("announcement");
+      const closeBtn = document.getElementById("closeAnnouncement");
+
+      // 页面加载时显示
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const date = today.getDate();
+
+      if (year === 2025 && month === 8 && date === 29) {
+        window.addEventListener("load", () => {
+          setTimeout(() => {
+            announcement.classList.add("show");
+          }, 500);
+        });
+      }
+
+      // 关闭公告栏
+      closeBtn.addEventListener("click", () => {
+        announcement.classList.remove("show");
+      });
+      // 每分钟检查一次截止
+      // setInterval(checkDeadline, 60000);
+
+      function autoRoll(times = 100) {
+        const zone = rollzone;
+        zone.innerHTML = "";
+        for (let i = 0; i < times; i++) {
+          setTimeout(() => {
+            const item = weightedPick();
+            const card = renderCard(item);
+            zone.appendChild(card);
+
+            pushHistory(item);
+            updateStats();
+
+          
+          }, 0);
+        }
+      }
+
+      // 自动化
+      // rollInterval = setInterval(autoRoll, 100);
+      // 如果需要停止轮询，可以调用
+      // clearInterval(rollInterval);
+    </script>
+</body>
+</html>
